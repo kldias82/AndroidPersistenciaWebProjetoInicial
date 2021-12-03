@@ -1,10 +1,13 @@
 package br.com.alura.estoque.repository;
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 
 import java.util.List;
 
 import br.com.alura.estoque.asynctask.BaseAsyncTask;
+import br.com.alura.estoque.database.EstoqueDatabase;
 import br.com.alura.estoque.database.dao.ProdutoDAO;
 import br.com.alura.estoque.model.Produto;
 import br.com.alura.estoque.retrofit.EstoqueRetrofit;
@@ -18,9 +21,10 @@ public class ProdutoRepository {
     private final ProdutoDAO dao;
     private final ProdutoService service;
 
-    public ProdutoRepository(ProdutoDAO dao) {
+    public ProdutoRepository(Context context) {
 
-        this.dao = dao;
+        EstoqueDatabase db = EstoqueDatabase.getInstance(context);
+        dao = db.getProdutoDAO();
         service = new EstoqueRetrofit().getProdutoService();
     }
 
@@ -157,7 +161,6 @@ public class ProdutoRepository {
 
     public interface DadosCarregadosCallback<T> {
         void quandoSucesso(T resultado);
-
         void quandoFalha(String erro);
     }
 }
